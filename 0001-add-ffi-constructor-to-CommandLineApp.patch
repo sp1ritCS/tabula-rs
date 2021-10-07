@@ -1,0 +1,52 @@
+From 7100fb68b3286bf587cc65753138b903f1666fa8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20sp1rit=E2=80=8B?= <sp1ritCS@protonmail.com>
+Date: Thu, 7 Oct 2021 22:24:08 +0200
+Subject: [PATCH] add ffi constructor to CommandLineApp
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Florian "sp1rit"​ <sp1ritCS@protonmail.com>
+Signed-off-by: Florian "sp1rit"​ <sp1rit@disroot.org>
+---
+ .../java/technology/tabula/CommandLineApp.java  | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/src/main/java/technology/tabula/CommandLineApp.java b/src/main/java/technology/tabula/CommandLineApp.java
+index 4a771fb..bfaf5a0 100644
+--- a/src/main/java/technology/tabula/CommandLineApp.java
++++ b/src/main/java/technology/tabula/CommandLineApp.java
+@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
+ import java.io.FileWriter;
+ import java.io.IOException;
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ 
+ import org.apache.commons.cli.CommandLine;
+@@ -57,6 +58,22 @@ public class CommandLineApp {
+         }
+     }
+ 
++	public CommandLineApp(Pair<Integer, Rectangle>[] page_areas, Integer[] pages, OutputFormat output_format, boolean guess, ExtractionMethod extraction_method, boolean use_returns, String password) throws ParseException {
++		if (page_areas != null)
++			this.pageAreas = Arrays.asList(page_areas);
++		if (pages != null)
++			this.pages = Arrays.asList(pages);
++		this.outputFormat = output_format;
++
++		TableExtractor extractor = new TableExtractor();
++		extractor.setGuess(guess);
++		extractor.setMethod(extraction_method);
++		extractor.setUseLineReturns(use_returns);
++		this.tableExtractor = extractor;
++
++		this.password = password;
++	}
++
+     public static void main(String[] args) {
+         CommandLineParser parser = new DefaultParser();
+         try {
+-- 
+2.33.0
+
