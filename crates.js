@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["anyhow","bytes","cesu8","cfg_if","combine","jni","jni_sys","libc","log","memchr","proc_macro2","quote","syn","tabula","thiserror","thiserror_impl","unicode_xid"];
