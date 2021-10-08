@@ -1,4 +1,4 @@
-From 7100fb68b3286bf587cc65753138b903f1666fa8 Mon Sep 17 00:00:00 2001
+From 9fa69e29974230b68b217d279f26949a09308ffb Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Florian=20sp1rit=E2=80=8B?= <sp1ritCS@protonmail.com>
 Date: Thu, 7 Oct 2021 22:24:08 +0200
 Subject: [PATCH] add ffi constructor to CommandLineApp
@@ -10,7 +10,8 @@ Signed-off-by: Florian "sp1rit"​ <sp1ritCS@protonmail.com>
 Signed-off-by: Florian "sp1rit"​ <sp1rit@disroot.org>
 ---
  .../java/technology/tabula/CommandLineApp.java  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ .../technology/tabula/writers/CSVWriter.java    |  2 +-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/technology/tabula/CommandLineApp.java b/src/main/java/technology/tabula/CommandLineApp.java
 index 4a771fb..bfaf5a0 100644
@@ -47,6 +48,19 @@ index 4a771fb..bfaf5a0 100644
      public static void main(String[] args) {
          CommandLineParser parser = new DefaultParser();
          try {
+diff --git a/src/main/java/technology/tabula/writers/CSVWriter.java b/src/main/java/technology/tabula/writers/CSVWriter.java
+index 682397b..7cbf46b 100644
+--- a/src/main/java/technology/tabula/writers/CSVWriter.java
++++ b/src/main/java/technology/tabula/writers/CSVWriter.java
+@@ -20,7 +20,7 @@ public class CSVWriter implements Writer {
+     }
+ 
+     protected CSVWriter(CSVFormat format) {
+-        this.format = format;
++        this.format = format.withRecordSeparator("\n");
+     }
+ 
+ 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 -- 
 2.33.0
 
