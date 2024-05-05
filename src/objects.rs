@@ -65,8 +65,8 @@ impl Rectangle {
 impl <'env> IntoJObject<'env> for Rectangle {
 	fn get_jobject(&self, env: &'env TabulaEnv) -> JResult<JObject<'env>> {
 		env.new_object("technology/tabula/Rectangle", "(FFFF)V", &[
-			JValue::from(self.left),
 			JValue::from(self.top),
+			JValue::from(self.left),
 			JValue::from(self.width),
 			JValue::from(self.height)
 		])
