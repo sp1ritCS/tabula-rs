@@ -74,7 +74,11 @@ impl <'env> IntoJObject<'env> for Rectangle {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct Pair<'env, K: IntoJObject<'env>, V: IntoJObject<'env>>(K, V, &'env std::marker::PhantomData<()>);
+pub struct Pair<'env, K: IntoJObject<'env>, V: IntoJObject<'env>>(
+	K,
+	V,
+	#[allow(dead_code)] &'env std::marker::PhantomData<()>,
+);
 impl <'env, K: IntoJObject<'env>, V: IntoJObject<'env>> Pair<'env, K, V> {
 	pub fn new(left: K, right: V) -> Self {
 		Self(left, right, &std::marker::PhantomData)
