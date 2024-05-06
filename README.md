@@ -12,7 +12,7 @@
 
 Add this to your `Cargo.toml`:
 ```toml
-tabula = "0.1.0"
+tabula = "0.1.1"
 ```
 
 ## Run tests
