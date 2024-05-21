@@ -13,7 +13,7 @@ pub const ABSOLUTE_AREA_CALCULATION_MODE: i32 = 1;
 // jobject impls
 impl <'env> IntoJObject<'env> for JObject<'env> {
 	fn get_jobject(&self, _env: &'env TabulaEnv) -> JResult<JObject<'env>> {
-		Ok(self.clone())
+		Ok(*self)
 	}
 }
 

@@ -2,7 +2,8 @@
 //! # Rust bindings for tabulapdf/tabula-java
 //! 
 //! ## Prerequisites
-//! In order to use tabula-rs, you will need a tabula-java bytecode archive (jar). You can build it yourself by cloning <ssh://git@github.com/tabulapdf/tabula-java.git> and then running invoking [maven](https://software.opensuse.org/package/maven) to build it.
+//! In order to use tabula-rs, you will need a tabula-java bytecode archive (jar).
+//! You can build it yourself by cloning <ssh://git@github.com/tabulapdf/tabula-java.git> and then running invoking [maven](https://software.opensuse.org/package/maven) to build it.
 //! ```sh
 //! git clone git@github.com:tabulapdf/tabula-java.git && cd tabula-java
 //! mvn compile assembly:single
@@ -11,9 +12,15 @@
 //!
 //! Additionally, make sure `$JAVA_HOME/lib/server/libjvm.so` is reachable through `LD_LIBRARY_PATH` or explicitly set it as `LD_PRELOAD`.
 //!
+//! This can look like this:
+//! ```sh
+//! export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$JAVA_HOME/lib/server/
+//! ```
+//!
 //! ## Using tabula-rs
 //! ### Initalizing JVM & accessing JNI
-//! in order to make use of tabula-java, you'll need to start [jni::JavaVM] with the built archive added to its classpath. You could either do this manually, or call [TabulaVM::new()]` with the (space escaped) path to the archive as parameter.
+//! In order to make use of tabula-java, you'll need to start [jni::JavaVM] with the built archive added to its classpath.
+//! You could either do this manually, or call [TabulaVM::new()]` with the (space escaped) path to the archive as parameter.
 //! 
 //! Using [TabulaVM] you can now access the Java native interface by calling [TabulaVM::attach()].
 //! ```
@@ -68,9 +75,10 @@ impl <'env> TabulaVM {
 	/// - `debug`: runs jvm with `-Xcheck:jni`
 	///
 	pub fn new(libpath: &str, debug: bool) -> Result<Self> {
+		let opt = format!("-Djava.class.path={}", libpath);
 		let mut jvm_args = InitArgsBuilder::new()
 			.version(JNIVersion::V8)
-			.option(&format!("-Djava.class.path={}", libpath));
+			.option(&opt);
 
 		if debug {
 			jvm_args = jvm_args.option("-Xcheck:jni");
@@ -126,6 +134,7 @@ impl <'env> TabulaEnv<'env> {
 	/// - `use_returns`: Use embedded line returns in cells. (Only in spreadsheet mode.)
 	/// - `password`: Password to decrypt document. None in case of no password.
 	///
+	#[allow(clippy::too_many_arguments)]
 	pub fn configure_tabula(&self,
 		page_areas: Option<&[(i32, Rectangle)]>,
 		pages: Option<&[i32]>,
@@ -146,8 +155,8 @@ impl <'env> TabulaEnv<'env> {
 			JValue::from(JObject::null())
 		};
 		let password = password
-			.map(|pw| self.new_string(pw).ok()).flatten()
-			.map(|jstr| JValue::from(jstr))
+			.and_then(|pw| self.new_string(pw).ok())
+			.map(JValue::from)
 			.unwrap_or(JValue::from(JObject::null()));
 		let tabula = self.new_object("technology/tabula/CommandLineApp", "([Ltechnology/tabula/Pair;[Ljava/lang/Integer;Ltechnology/tabula/CommandLineApp$OutputFormat;ZLtechnology/tabula/CommandLineApp$ExtractionMethod;ZLjava/lang/String;)V", &[
 			areas,
@@ -196,7 +205,7 @@ impl Tabula<'_> {
 		let file = path.get_jobject(self.env)?;
 		let outfile = unsafe { output.get_path() }.get_jobject(self.env)?;
 		
-		self.env.call_method(self.deref().clone(), "extractFileInto", "(Ljava/io/File;Ljava/io/File;)V", &[
+		self.env.call_method(*self.deref(), "extractFileInto", "(Ljava/io/File;Ljava/io/File;)V", &[
 			JValue::Object(file),
 			JValue::Object(outfile)
 		])?;
