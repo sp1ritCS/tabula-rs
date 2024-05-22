@@ -78,9 +78,10 @@ impl <'env> TabulaVM {
 	/// - `debug`: runs jvm with `-Xcheck:jni`
 	///
 	pub fn new(libpath: &str, debug: bool) -> Result<Self> {
+		let opt = format!("-Djava.class.path={}", libpath);
 		let mut jvm_args = InitArgsBuilder::new()
 			.version(JNIVersion::V8)
-			.option(&format!("-Djava.class.path={}", libpath));
+			.option(&opt);
 
 		if debug {
 			jvm_args = jvm_args.option("-Xcheck:jni");
