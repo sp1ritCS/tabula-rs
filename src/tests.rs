@@ -3,7 +3,7 @@ use std::io::Read;
 
 #[test]
 fn parse_document() -> Result<(), anyhow::Error> {
-	let vm = TabulaVM::new("/tmp/tabula-java/target/tabula-1.0.6-SNAPSHOT-jar-with-dependencies.jar", true)?;
+	let vm = TabulaVM::new("../tabula-java/target/tabula-1.0.6-SNAPSHOT-jar-with-dependencies.jar", true)?;
 	let env = vm.attach()?;
 	let areas: Vec<(i32, Rectangle)> = vec![(ABSOLUTE_AREA_CALCULATION_MODE, Rectangle::from_coords(58.9, 150.56, 654.7, 596.12))];
 	let tabula = env.configure_tabula(Some(&areas), Some(&[1]), OutputFormat::Csv, false, ExtractionMethod::Decide, false, None)?;

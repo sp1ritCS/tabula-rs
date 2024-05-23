@@ -16,9 +16,9 @@
 //!
 //! Additionally, make sure `$JAVA_HOME/lib/server/libjvm.so` is reachable through `LD_LIBRARY_PATH` or explicitly set it as `LD_PRELOAD`.
 //!
-//! Examples:
+//! Example:
 //! export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/jvm/java-17-jdk/lib/server/
-//! export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/jvm/java-22-openjdk/lib/server/
+//! cargo test
 //!
 //! ## Using tabula-rs
 //! ### Initalizing JVM & accessing JNI

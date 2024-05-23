@@ -2,7 +2,7 @@
 name = "tabula"
 version = "0.1.2"
 authors = ["sp1rit <sp1rit@disroot.org>"]
-edition = "2018"
+edition = "2021"
 description = "Rust bindings for tabulapdf/tabula-java"
 license = "AGPL-3.0-or-later"
 readme = "README.md"
