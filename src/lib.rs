@@ -6,6 +6,7 @@
 //! You can build it yourself by cloning <ssh://git@github.com/tabulapdf/tabula-java.git> and then running invoking [maven](https://software.opensuse.org/package/maven) to build it.
 //! ```sh
 //! git clone git@github.com:tabulapdf/tabula-java.git && cd tabula-java
+//! git apply path/to/tabula-rs/0001-add-ffi-constructor-to-CommandLineApp.patch
 //! mvn compile assembly:single
 //! ```
 //! the built archive should then be target/tabula-$TABULA_VER-jar-with-dependencies.jar.
@@ -24,6 +25,7 @@
 //! 
 //! Using [TabulaVM] you can now access the Java native interface by calling [TabulaVM::attach()].
 //! ```
+//! # use tabula::TabulaVM;
 //! let vm = TabulaVM::new("../tabula-java/target/tabula-1.0.6-SNAPSHOT-jar-with-dependencies.jar", false).unwrap();
 //! let env = vm.attach().unwrap();
 //! ```
@@ -31,13 +33,20 @@
 //! ### Instantiating Tabula class
 //! with access to the JNI you can instantia the [Tabula] class by calling [TabulaEnv::configure_tabula()].
 //! ```
-//! let tabula = env.configure_tabula(None, None, OutputFormat::Csv, true, ExtractionMethod::Basic, false, None).unwrap();
+//! # use tabula::{ExtractionMethod, OutputFormat, TabulaVM};
+//! # let vm = TabulaVM::new("../tabula-java/target/tabula-1.0.6-SNAPSHOT-jar-with-dependencies.jar", false).unwrap();
+//! # let env = vm.attach().unwrap();
+//! let t = env.configure_tabula(None, None, OutputFormat::Csv, true, ExtractionMethod::Basic, false, None).unwrap();
 //! ```
 //!
 //! ### Parsing the document
 //! [Tabula] provides [Tabula::parse_document()] that then parses a document located a its given path and returns a [std::fs::File] located in memory.
 //! ```
-//! let file = tabula.parse_document(&std::path::Path::new("./test_data/spanning_cells.pdf"), "test_spanning_cells").unwrap();
+//! # use tabula::{ExtractionMethod, OutputFormat, TabulaVM};
+//! # let vm = TabulaVM::new("../tabula-java/target/tabula-1.0.6-SNAPSHOT-jar-with-dependencies.jar", false).unwrap();
+//! # let env = vm.attach().unwrap();
+//! # let t = env.configure_tabula(None, None, OutputFormat::Csv, true, ExtractionMethod::Basic, false, None).unwrap();
+//! let file = t.parse_document(&std::path::Path::new("./test_data/spanning_cells.pdf"), "test_spanning_cells").unwrap();
 //! ```  
 //! 
 //! ## Relavant links
