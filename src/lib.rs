@@ -54,7 +54,7 @@
 //! - tabula-java project: <https://github.com/tabulapdf/tabula-java/>
 
 
-mod mem_file;
+mod tmp_file;
 mod objects;
 use objects::{IntoJObject, Pair};
 pub use objects::{RELATIVE_AREA_CALCULATION_MODE, ABSOLUTE_AREA_CALCULATION_MODE, Rectangle, OutputFormat, ExtractionMethod};
@@ -209,18 +209,29 @@ impl Tabula<'_> {
 	/// `descriptor_name` refers to the filename passed to [memfd_create()](https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man2/memfd_create.2)
 	///
 	pub fn parse_document(&self, path: &Path, descriptor_name: &str) -> Result<std::fs::File> {
-		let output = unsafe { mem_file::TmpMemFile::new(descriptor_name) }?;
+		let output = tmp_file::TmpFile::new(descriptor_name)?;
 
-		let file = path.get_jobject(self.env)?;
-		let outfile = unsafe { output.get_path() }.get_jobject(self.env)?;
+		let output_path = output.get_path();
+
+		self.parse_document_into(path, &output_path)?;
 		
+		let file = output.get_file();
+		Ok(file)
+	}
+
+	///
+	/// # Parse document located at `path`, writing the output into the file at `output`.
+	///
+	pub fn parse_document_into(&self, path: &Path, output: &Path) -> Result<()> {
+		let file = path.get_jobject(self.env)?;
+		let outfile = output.get_jobject(self.env)?;
+
 		self.env.call_method(*self.deref(), "extractFileInto", "(Ljava/io/File;Ljava/io/File;)V", &[
 			JValue::Object(file),
 			JValue::Object(outfile)
 		])?;
 
-		let file = unsafe { output.get_file() };
-		Ok(file)
+		Ok(())
 	}
 }
 
