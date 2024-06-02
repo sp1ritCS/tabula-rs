@@ -206,7 +206,7 @@ impl Tabula<'_> {
 
 		self.parse_document_into(path, &output_path)?;
 		
-		let file = output.get_file();
+		let file = output.into_file();
 		Ok(file)
 	}
 
