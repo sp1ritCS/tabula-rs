@@ -200,13 +200,13 @@ impl Tabula<'_> {
 	/// `descriptor_name` refers to the filename passed to [memfd_create()](https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man2/memfd_create.2)
 	///
 	pub fn parse_document(&self, path: &Path, descriptor_name: &str) -> Result<std::fs::File> {
-		let output = unsafe { tmp_file::TmpFile::new(descriptor_name) }?;
+		let output = tmp_file::TmpFile::new(descriptor_name)?;
 
-		let output_path = unsafe { output.get_path() };
+		let output_path = output.get_path();
 
 		self.parse_document_into(path, &output_path)?;
 		
-		let file = unsafe { output.get_file() };
+		let file = output.get_file();
 		Ok(file)
 	}
 
