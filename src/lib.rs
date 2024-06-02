@@ -54,7 +54,8 @@ pub use objects::{RELATIVE_AREA_CALCULATION_MODE, ABSOLUTE_AREA_CALCULATION_MODE
 
 use anyhow::Result;
 use jni::{AttachGuard, InitArgsBuilder, JNIEnv, JNIVersion, JavaVM, objects::{JObject, JValue}, errors::Error as JError};
-pub use jni; // reexport
+pub use jni;
+use tmp_file::TempFile; // reexport
 
 use std::result::Result as StdResult;
 use std::ops::Deref;
@@ -200,7 +201,7 @@ impl Tabula<'_> {
 	/// `descriptor_name` refers to the filename passed to [memfd_create()](https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man2/memfd_create.2)
 	///
 	pub fn parse_document(&self, path: &Path, descriptor_name: &str) -> Result<std::fs::File> {
-		let output = tmp_file::TmpFile::new(descriptor_name)?;
+		let output = tmp_file::new(descriptor_name)?;
 
 		let output_path = output.get_path();
 
