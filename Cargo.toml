@@ -1,6 +1,6 @@
 [package]
 name = "tabula"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["sp1rit <sp1rit@disroot.org>"]
 edition = "2021"
 description = "Rust bindings for tabulapdf/tabula-java"
